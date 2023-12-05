@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+wbimg/
+.idea
+.env
+*.zip
+static/
+*.jpg
+*.png
+*.webp
+*.xml
