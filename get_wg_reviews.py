@@ -1,10 +1,11 @@
 #получает отзывы по всем товарам
 #Выгружает фото отзывов в папку wb_img_review
-
+import os
 from dotenv import load_dotenv
 from classes.db_my import DataMysql
 from classes.wbAPI import wbAPI
-import os
+from classes.fileManager import fileManager
+
 
 
 load_dotenv()
@@ -27,12 +28,32 @@ wb_goods = db.get_wb_goods('AllConsoles')
 
 for good in wb_goods:
     print(good)
-    #Выдернем Архивные отзывы и обычные отзывы
-    result = wbAPI.get_wb_reviews(good[0],10)
+    #Выдернем Архивные отзывы
+    result = wbAPI.get_wb_reviews(good[0],25)
     num_feedbacks = len(result['data']['feedbacks'])
-
     if(num_feedbacks>0):
-        print(result)
+        # print(result)
+        #Пробегаем по всем отзывам
+        for feedback in result['data']['feedbacks']:
+            print(feedback['id'])
+            print(feedback['text'])
+            print(feedback['productValuation'])
+            print(feedback['createdDate'])
+            print(feedback['productDetails']['nmId'])
+            print(feedback['productDetails']['supplierArticle'])
+
+            if(feedback['photoLinks'] != None):
+                num_photoLinks = len(feedback['photoLinks'])
+                if (num_photoLinks > 0):
+                    imgs=[]
+                    for photo_url in feedback['photoLinks']:
+                        #Перебираем фоточки и показываем
+                        print(photo_url['fullSize'])
+                        imgs.append(photo_url['fullSize'])
+                    file_name = str(feedback['productDetails']['supplierArticle'] + "_" + feedback['id'])
+                    fileManager.download_files(imgs, 'wb_reviews', file_name)
+
+
     # if result['data']['feedbacks']['video'][0] != None:
     #     print("Ахтунг - видео есть")
     #     print(result['data']['feedbacks']['video'][0])
