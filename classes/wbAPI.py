@@ -16,19 +16,59 @@ class wbAPI:
         self.URL_WB_LIST = config['URL_WB_LIST']
         self.URL_WB_REVIEW_ARCHIVE_LIST = config['URL_WB_REVIEW_ARCHIVE_LIST']
 
-    def get_wb_goods(self, limit):
+    def get_all_wb_cards(self):
+        limit = 1000
+        with_photo = -1
+        cards = []
+
+        # Первый запрос
+        response = self.make_request(limit, with_photo)
+        data = response['data']
+        cards.extend(data['cards'])
+        cursor = data['cursor']
+
+        # Повторяем запросы, пока не получим все карточки
+        while cursor['total'] >= limit:
+            cursor_query = {
+                "updatedAt": cursor["updatedAt"],
+                "nmID": cursor["nmID"]
+            }
+
+            print(cursor_query)
+            response = self.make_request(limit, with_photo, cursor_query)
+            data = response['data']
+            cards.extend(data['cards'])
+            cursor = data['cursor']
+
+        return cards
+
+    def make_request(self, limit, with_photo, cursor_query=None):
         payload = {
             'sort': {
                 'cursor': {
                     'limit': limit
                 },
                 'filter': {
-                    'withPhoto': -1
+                    'withPhoto': with_photo
                 }
             }
         }
 
-        response = requests.post(self.URL_WB_LIST, headers=self.header, json=payload)
+        if cursor_query:
+            payload = {
+                'sort': {
+                    'cursor': {
+                        'limit': limit,
+                        'updatedAt': cursor_query['updatedAt'],
+                        'nmID': cursor_query['nmID']
+                    },
+                    'filter': {
+                        'withPhoto': with_photo
+                    }
+                }
+            }
+
+        response = requests.post(self.URL_WB_LIST, json=payload, headers=self.header)
         return response.json()
 
     def get_wb_reviews (self, nmId, limit):

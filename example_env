@@ -1,0 +1,9 @@
+DB_HOST=#Ваш хост, где находится БД
+DB_USER=#Ваш пользователь БД
+DB_PASS=#Пароль пользователя БД
+DB_NAME=#Имя БД
+TOKEN_WB=#Ваш токен для авторизации для Wildberriez с разрешением подключиться к контенту
+URL_WB_LIST=https://suppliers-api.wildberries.ru/content/v1/cards/cursor/list
+URL_WB_REVIEW_LIST=https://feedbacks-api.wildberries.ru/api/v1/feedbacks
+URL_WB_REVIEW_ARCHIVE_LIST=https://feedbacks-api.wildberries.ru/api/v1/feedbacks/archive
+

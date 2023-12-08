@@ -1,10 +1,8 @@
 import os
-import requests
 import urllib.request
 import ssl
 class fileManager:
-    #Разбор и обработка данных проекта
-    #На входе ID клиента, URL проекта, ID проекта и массив категорий для создания индекса
+
     def __init__(self):
         print("Инициализируем")
 
