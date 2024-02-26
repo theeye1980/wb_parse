@@ -1,6 +1,7 @@
 import os
 import urllib.request
 import ssl
+import csv
 class fileManager:
 
     def __init__(self):
@@ -27,3 +28,16 @@ class fileManager:
                 counter = counter + 1
         else:
             print("URL list is empty.")
+
+    @staticmethod
+    def save_as_csv(dict_list, filename):
+            if not dict_list:
+                return
+
+            keys = dict_list[0].keys()
+
+            with open(filename, 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=keys, delimiter=';')
+
+                writer.writeheader()
+                writer.writerows(dict_list)

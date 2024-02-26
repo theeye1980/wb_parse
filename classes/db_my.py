@@ -44,6 +44,22 @@ class DataMysql:
         else:
             return None
 
+    def get_art_by_wbid(self, wbid):
+            query = "SELECT wbVendorCode FROM wb_content WHERE nmID = '%s'"
+            # Fetch the result
+            values = (wbid)
+            result_sql = query % values
+            self.db_cursor.execute(result_sql)
+            result = self.db_cursor.fetchall()
+
+            # Return the category ID if found, otherwise return None
+            if result:
+                imgURLs = [row[0] for row in result]
+                return imgURLs
+
+            else:
+                return None
+
 ### Insert методы
 
     def insert_wb_articles_batch(self, data):
